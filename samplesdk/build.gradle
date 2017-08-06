@@ -1,0 +1,49 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion project.ext.compileSdkVersion
+    buildToolsVersion project.ext.buildToolsVersion
+
+    defaultConfig {
+        defaultPublishConfig 'release'
+        minSdkVersion project.ext.minSdkVersion
+        targetSdkVersion project.ext.targetSdkVersion
+        versionCode 1
+        versionName project.ext.releaseVersion
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        //This is found in default config
+        consumerProguardFiles 'proguard-rules.pro'
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            FileCollection collection = files('proguard-rules.pro', getDefaultProguardFile('proguard-android-optimize.txt'))
+            FileCollection consumerFiles = files('proguard.txt')
+            setProguardFiles(collection)
+            //trying to override the values here - with no luck as both files are merged.
+            setConsumerProguardFiles(consumerFiles)
+        }
+    }
+    publishNonDefault true
+
+    lintOptions {
+        abortOnError false
+    }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/notice.txt'
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
+    testCompile 'junit:junit:4.12'
+
+}

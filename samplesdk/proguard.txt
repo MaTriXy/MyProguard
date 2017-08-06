@@ -1,0 +1,3 @@
+-dontwarn io.sentry.**
+-dontwarn org.slf4j.**
+-dontwarn javax.**
